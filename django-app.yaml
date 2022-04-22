@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: app
+          image: b1nch3f/django-app:latest
+          ports:
+            - containerPort: 5503
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app
+spec:
+  selector:
+    app: django-app
+  ports:
+    - port: 80
+      targetPort: 5503
+  type: LoadBalancer
